@@ -2,7 +2,7 @@
 
 * Original version of cif2cell (https://sourceforge.net/projects/cif2cell/) is modified for comatibility with Python 3.
 
-# Dependency
+## Dependency
 
 ```
 pip install PyCIFRW
@@ -18,7 +18,7 @@ structure codes from a CIF (Crystallographic Information
 Framework) file. The code will generate the crystal structure for
 the primitive cell or the conventional cell.
 
-CURRENTLY SUPPORTS
+## CURRENTLY SUPPORTS
 
 |code           | support |   output files|
 |---------------|---------|-----------------------------------|
@@ -46,7 +46,8 @@ CURRENTLY SUPPORTS
 |spr-kkr        |   yes   | [compoundname].sys|
 |xyz            |   no    | [compoundname].xyz|
 
-CONTENTS
+## CONTENTS
+
 The distribution includes:
 * This README file.
 * The file LICENSE with the GPLv3 license.
@@ -61,7 +62,7 @@ The distribution includes:
   parsing CIF files.
 
 
-INSTALLATION INSTRUCTIONS
+## INSTALLATION INSTRUCTIONS
 
 Prerequisites: The program requires Python 2.4 or higher and the
                PyCIFRW python package (which will be installed
@@ -71,7 +72,11 @@ Prerequisites: The program requires Python 2.4 or higher and the
 	       with Python 2.4 than with later versions.
 
 To install the program in your systems standard location, simply type:
+
+```
 python setup.py install
+```
+
 To choose a different location, add
 --prefix=where/you/want/it
 to the above line. For help and more options type
@@ -81,13 +86,13 @@ The installation will also create a directory $PREFIX/lib/cif2cell
 that contains the manual and sample cif files.
 
 
-DOCUMENTATION
+## DOCUMENTATION
 
 The setup will install the manual, cif2cell.pdf, into the
 $PREFIX/lib/cif2cell/docs directory.
 
 
-RUNNING
+## RUNNING
 
 Run 'cif2cell -h' to get a listing of the different options.
 Example:
@@ -95,7 +100,7 @@ cif2cell Ni20Mn3P6.cif -p vasp --vasp-cartesian-positions
 will generate a POSCAR file for VASP with the positions in cartesian format.
 
 
-LICENSE INFORMATION
+## LICENSE INFORMATION
 
 cif2cell is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
