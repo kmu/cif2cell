@@ -1,6 +1,6 @@
 # Python 3 Support
 
-* Original version of cif2cell (https://sourceforge.net/projects/cif2cell/) is modified for comatibility with Python 3.
+* Original version of cif2cell (https://sourceforge.net/projects/cif2cell/) is modified for compatibility with Python 3.
 
 ## Dependency
 
