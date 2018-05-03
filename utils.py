@@ -352,7 +352,7 @@ class AtomSite(GeometryObject):
         ## self.charge = Charge(charge)
         self.index = index
     def __hash__(self):
-        return hash(hash(self.position)+hash(''.join(sorted(self.species.keys())))+hash(sum(self.species.values())))
+        return hash(hash(self.position)+hash(''.join(sorted(list(self.species.keys()))))+hash(sum(self.species.values())))
     def __eq__(self,other):
         return self.position == other.position and self.species == other.species
     # Species string, sorted by atomic weight.
@@ -368,7 +368,7 @@ class AtomSite(GeometryObject):
         return tmp
     # Is there more than one species on this site?
     def alloy(self):
-        occsum = sum([v for k,v in self.species.iteritems()])
+        occsum = sum([v for k,v in self.species.items()])
         return len(self.species) > 1 or abs(occsum-1) > self.compeps
     # print site data in some informative way
     def __str__(self):
@@ -377,7 +377,7 @@ class AtomSite(GeometryObject):
         # Position
         tmp += " %19.15f %19.15f %19.15f   "%(self.position[0],self.position[1],self.position[2])
         # occupancy
-        for k,v in self.species.iteritems():
+        for k,v in self.species.items():
             tmp += str(v)+"/"
         tmp = tmp.rstrip("/")
         return tmp
@@ -395,7 +395,7 @@ class AtomSite(GeometryObject):
                 except:
                     pass
         else:
-            for sp,ch in self.charges.iteritems():
+            for sp,ch in self.charges.items():
                 try:
                     t.append(ElementData().IonicRadius[sp+str(ch)])
                 except:
