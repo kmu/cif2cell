@@ -70,17 +70,17 @@ class LoopBlock:
             for item in data:
                 self.AddLoopItem(item)
         elif isinstance(data,LoopBlock):
-            self.block = data.block.copy() 
+            self.block = data.block.copy()
             self.item_order = data.item_order[:]
             self.lower_keys = data.lower_keys[:]
             self.comment_list = data.comment_list.copy()
             self.dimension = data.dimension
-            # loops as well; change loop class 
+            # loops as well; change loop class
             for loopno in range(len(data.loops)):
                 try:
                     placeholder = self.item_order.index(data.loops[loopno])
                 except ValueError:
-                    print "Warning: loop %s (%s) in loops, but not in item_order (%s)" % (`data.loops[loopno]`,str(data.loops[loopno]),`self.item_order`)
+                    print("Warning: loop {0} ({1}) in loops, but not in item_order ({2})".format(data.loops[loopno],str(data.loops[loopno]), self.item_order))
                     placeholder = -1
                 self.item_order.remove(data.loops[loopno])   #gone
                 newobject = self.loopclass(data.loops[loopno])
@@ -97,7 +97,7 @@ class LoopBlock:
 
     def __getitem__(self,key):
         if isinstance(key,IntType):   #return a packet!!
-            return self.GetPacket(key)        
+            return self.GetPacket(key)
         return self.GetLoopItem(key)
 
     def __delitem__(self,key):
@@ -108,7 +108,7 @@ class LoopBlock:
         for aloop in self.loops:
             # print 'Aloop is %s' % `aloop`
             blen = blen + len(aloop)  # also a LoopBlock
-        return blen    
+        return blen
 
     def __nonzero__(self):
         if self.__len__() > 0: return 1
@@ -162,7 +162,7 @@ class LoopBlock:
             try:
                 placeholder = self.item_order.index(loop)
             except ValueError:
-                print "Warning: loop %s (%s) in loops, but not in item_order (%s)" % (`loop`,str(loop),`self.item_order`)
+                print("Warning: loop {0} ({1}) in loops, but not in item_order ({2})".format(loop, str(loop), self.item_order))
                 placeholder = -1
             newcopy.item_order.remove(loop)   #gone
             newobject = loop.copy()
@@ -172,13 +172,13 @@ class LoopBlock:
 
     # this is not appropriate for subloops.  Instead, the loop block
     # should be accessed directly for update
-     
+
     def update(self,adict):
         for key in adict.keys():
             self.AddLoopItem((key,adict[key]))
 
     def load_iter(self,coords=[]):
-        count = 0        #to create packet index 
+        count = 0        #to create packet index
         while not self.popout:
             # ok, we have a new packet:  append a list to our subloops
             for aloop in self.loops:
@@ -216,7 +216,7 @@ class LoopBlock:
         if self.dimension > 1:      #otherwise have a top-level list
             for iname in self.keys():  #includes lower levels
                 target_list = self[iname]
-                for i in range(3,self.dimension): #dim 2 upwards are lists of lists of... 
+                for i in range(3,self.dimension): #dim 2 upwards are lists of lists of...
                     target_list = target_list[-1]
                 target_list.append([])
                 # print '%s now %s' % (iname,`self[iname]`)
@@ -231,7 +231,7 @@ class LoopBlock:
             if len(drill_values)>0:            #this block has values
                 drill_values=drill_values[0]   #drill in
             else:
-                raise StarError("Malformed loop packet %s" % `top_items[0]`)
+                raise StarError("Malformed loop packet {}".format(top_items[0]))
         my_length = len(drill_values)
         if self.dimension == 0:                #top level
             for aloop in self.loops:
@@ -261,7 +261,7 @@ class LoopBlock:
                         setattr(prep_yield,name,value)
                     yield prep_yield
 
-    # small function to use the coordinates. 
+    # small function to use the coordinates.
     def coord_to_group(self,dataname,coords):
           if not isinstance(dataname,StringType):
              return dataname     # flag inner loop processing
@@ -270,10 +270,10 @@ class LoopBlock:
               # print "Coord_to_group: %s ->" % (`newm`),
               newm = newm[c]
               # print `newm`
-          return newm 
+          return newm
 
     def flat_iterator(self):
-        if self.dimension == 0:   
+        if self.dimension == 0:
             yield copy.copy(self)
         else:
             my_length = 0
@@ -282,7 +282,7 @@ class LoopBlock:
                 my_length = len(self.block[top_keys[0]])
             for pack_no in range(my_length):
                 yield(self.collapse(pack_no))
-            
+
 
     def insert_loop(self,newloop,position=-1,audit=True):
         # check that new loop is kosher
@@ -293,7 +293,7 @@ class LoopBlock:
             dupes = self.audit()
             if dupes:
                 dupenames = map(lambda a:a[0],dupes)
-                raise StarError( 'Duplicate names: %s' % `dupenames`)
+                raise StarError( 'Duplicate names: {}'.format(dupenames))
         if position >= 0:
             self.item_order.insert(position,newloop)
         else:
@@ -305,7 +305,7 @@ class LoopBlock:
         # print "Length %d" % len(oldloop)
         self.item_order.remove(oldloop)
         self.loops.remove(oldloop)
-     
+
     def AddComment(self,itemname,comment):
         self.comment_list[itemname.lower()] = comment
 
@@ -323,14 +323,14 @@ class LoopBlock:
                 except KeyError:
                     pass
         if itemname.lower() not in self.lower_keys:
-            raise KeyError, 'Item %s not in block' % itemname
+            raise(KeyError, 'Item {} not in block'.format(itemname))
         # it is there somewhere, now we need to find it
         real_keys = self.block.keys()
-        lower_keys = map(lambda a:a.lower(),self.block.keys()) 
+        lower_keys = map(lambda a:a.lower(),self.block.keys())
         try:
             k_index = lower_keys.index(itemname.lower())
         except ValueError:
-            raise KeyError, 'Item %s not in block' % itemname
+            raise(KeyError, 'Item {} not in block'.format(itemname))
         return self.block[real_keys[k_index]]
 
     def RemoveLoopItem(self,itemname):
@@ -371,7 +371,7 @@ class LoopBlock:
            for one_item in data[0]:
                if self.has_key(one_item):
                    if not self.overwrite:
-                       raise StarError( 'Attempt to insert duplicate item name %s' % data[0])
+                       raise StarError( 'Attempt to insert duplicate item name {}'.format(data[0]))
                    else:
                        del self[one_item]
            newloop = self.loopclass(dimension = self.dimension+1)
@@ -380,11 +380,11 @@ class LoopBlock:
                newloop.AddLoopItem((key,val))
            self.insert_loop(newloop)
         elif not isinstance(data[0],StringType):
-                  raise TypeError, 'Star datanames are strings only (got %s)' % `data[0]`
+                  raise(TypeError, 'Star datanames are strings only (got {})'.format(data[0]))
         else:
            if data[1] == [] or get_dim(data[1])[0] == self.dimension:
                if not precheck:
-                   self.check_data_name(data[0],maxlength)    # make sure no nasty characters   
+                   self.check_data_name(data[0],maxlength)    # make sure no nasty characters
                # check that we can replace data
                if not self.overwrite:
                    if self.has_key(data[0]):
@@ -394,28 +394,28 @@ class LoopBlock:
                if not precheck:
                    try:
                        self.check_item_value(regval)
-                   except StarError, errmes:
-                       raise StarError( "Item name " + data[0] + " " + `errmes`)
+                   except(StarError, errmes):
+                       raise StarError( "Item name " + data[0] + " {}".format(errmes))
                if self.dimension > 0:
                    if self.no_packets <= 0:
                        self.no_packets = len(data[1])  #first item in this loop
                    if len(data[1]) != self.no_packets:
-                       raise StarLengthError, 'Not enough values supplied for %s' % (data[0])
+                       raise(StarLengthError, 'Not enough values supplied for {}'.format(data[0]))
                try:
                    oldpos = self.GetItemPosition(data[0])
                except ValueError:
-                   oldpos = len(self.item_order)#end of list 
+                   oldpos = len(self.item_order)#end of list
                self.RemoveLoopItem(data[0])     # may be different case, so have to do this
                self.block.update({data[0]:regval})  # trust the data is OK
                self.lower_keys.insert(oldpos,data[0].lower())
                self.item_order.insert(oldpos,data[0])
                #    self.lower_keys.append(data[0].lower())
                #    self.item_order.append(data[0])
-                
-           else:            #dimension mismatch
-               raise StarLengthError, "input data dim %d != required dim %d: %s %s" % (get_dim(data[1])[0],self.dimension,data[0],`data[1]`)
 
-    def check_data_name(self,dataname,maxlength=-1): 
+           else:            #dimension mismatch
+               raise(StarLengthError, "input data dim {0} != required dim {1}: {2} {3}".format(get_dim(data[1])[0], self.dimension,data[0], data[1]))
+
+    def check_data_name(self,dataname,maxlength=-1):
         if maxlength > 0:
             if len(dataname)>maxlength:
                 raise StarError( 'Dataname %s exceeds maximum length %d' % (dataname,maxlength))
@@ -431,7 +431,7 @@ class LoopBlock:
         def check_one (it):
             if type(it) == StringType:
                 if it=='': return
-                me = self.char_check.match(it)            
+                me = self.char_check.match(it)
                 if not me:
                     raise StarError( 'Bad character in %s' % it)
                 else:
@@ -440,8 +440,8 @@ class LoopBlock:
         map(check_one,test_item)
 
     def regularise_data(self,dataitem):
-        alrighttypes = [IntType, LongType, 
-                        FloatType, StringType]
+        alrighttypes = [IntType, LongType,
+                        float, StringType]
         okmappingtypes = [TupleType, ListType]
         thistype = type(dataitem)
         if thistype in alrighttypes or thistype in okmappingtypes:
@@ -453,19 +453,19 @@ class LoopBlock:
         # so try to make into a list
         try:
             regval = list(dataitem)
-        except TypeError, value:
+        except(TypeError, value):
             raise StarError( str(dataitem) + ' is wrong type for data value\n' )
         return regval
-        
+
     def GetLoop(self,keyname):
         if keyname in self.block:        #python 2.2 or above
             return self
         for aloop in self.loops:
-            try: 
+            try:
                 return aloop.GetLoop(keyname)
             except KeyError:
                 pass
-        raise KeyError, 'Item %s does not exist' % keyname
+        raise(KeyError, 'Item {} does not exist'.format(keyname))
 
     def GetPacket(self,index):
         thispack = StarPacket([])
@@ -479,17 +479,17 @@ class LoopBlock:
             else:
                 thispack.append(self[myitem][index])
                 setattr(thispack,myitem,thispack[-1])
-        return thispack 
+        return thispack
 
     def AddPacket(self,packet):
         if self.dimension==0:
-            raise StarError,"Attempt to add packet to top level block"
+            raise(StarError,"Attempt to add packet to top level block")
         for myitem in self.item_order:
             self[myitem] = list(self[myitem])   #in case we have stored a tuple
             self[myitem].append(packet.__getattribute__(myitem))
-        self.no_packets +=1 
+        self.no_packets +=1
             # print "%s now %s" % (myitem,`self[myitem]`)
-        
+
     def RemoveKeyedPacket(self,keyname,keyvalue):
         packet_coord = list(self[keyname]).index(keyvalue)
         loophandle = self.GetLoop(keyname)
@@ -497,12 +497,12 @@ class LoopBlock:
             loophandle[packet_entry] = list(loophandle[packet_entry])
             del loophandle[packet_entry][packet_coord]
         self.no_packets -= 1
-        
+
     def GetKeyedPacket(self,keyname,keyvalue):
         #print "Looking for %s in %s" % (keyvalue, self[keyname])
         one_pack= filter(lambda a:getattr(a,keyname)==keyvalue,self)
         if len(one_pack)!=1:
-            raise KeyError, "Bad packet key %s = %s: returned %d packets" % (keyname,keyvalue,len(one_pack))
+            raise(KeyError, "Bad packet key {0} = {1}: returned {2} packets".format(keyname,keyvalue,len(one_pack)))
         #print "Keyed packet: %s" % one_pack[0]
         return one_pack[0]
 
@@ -524,7 +524,7 @@ class LoopBlock:
                 return item
         try:
             testname = string.lower(itemname)
-        except AttributeError: 
+        except AttributeError:
             testname = itemname
         lowcase_order = map(low_case,self.item_order)
         return lowcase_order.index(testname)
@@ -538,27 +538,27 @@ class LoopBlock:
                 newlb.insert_loop(one_item.collapse(packet_no))
             else:
                 # print "Collapse: %s -> %s" % (one_item,`self[one_item][packet_no]`)
-                newlb[one_item] = self[one_item][packet_no] 
+                newlb[one_item] = self[one_item][packet_no]
         return newlb
-        
+
     def audit(self):
         import sets
         allkeys = self.keys()
         uniquenames = sets.Set(allkeys)
         if len(uniquenames) == len(allkeys): return []
-        else:              
+        else:
             keycount = map(lambda a:(a,allkeys.count(a)),uniquenames)
             return filter(lambda a:a[1]>1,keycount)
-        
+
     def GetLoopNames(self,keyname):
         if keyname in self:
             return self.keys()
         for aloop in self.loops:
-            try: 
+            try:
                 return aloop.GetLoopNames(keyname)
             except KeyError:
                 pass
-        raise KeyError, 'Item does not exist'
+        raise(KeyError, 'Item does not exist')
 
     def AddToLoop(self,dataname,loopdata):
         thisloop = self.GetLoop(dataname)
@@ -597,7 +597,7 @@ class LoopBlock:
             if self.dimension == 0:            # ie value next to tag
                 if not isinstance(itemname,LoopBlock):  #no loop
                    # grab any comment
-                   thiscomment = self.comment_list.get(itemname.lower(),'') 
+                   thiscomment = self.comment_list.get(itemname.lower(),'')
                    itemvalue = self[itemname]
                    if isinstance(itemvalue,StringType):  #need to sanitize
                          thisstring = self._formatstring(itemvalue)
@@ -640,11 +640,11 @@ class LoopBlock:
         while len(temp_order)>0:
             itemname = temp_order.pop(0)
             if isinstance(itemname,StringType):  #(not loop)
-                outstring.write(' ' * indent) 
+                outstring.write(' ' * indent)
                 outstring.write(itemname)
                 outstring.write("\n")
             else:                                # a loop
-                outstring.write(' ' * indent) 
+                outstring.write(' ' * indent)
                 outstring.write("loop_\n")
                 itemname.format_names(outstring,indent+2)
                 outstring.write(" stop_\n")
@@ -672,23 +672,23 @@ class LoopBlock:
            outstring.write(curstring + '\n')     #end of one packet
            curstring = ''
        outstring.write(' ' + curstring + '\n')    #last time through
-               
+
     def format_packet_item(self,pack_item,indent):
         # print 'Formatting %s' % `pack_item`
         curstring = ''
-        if isinstance(pack_item,(StringType,IntType,FloatType,LongType,StarTuple,StarList)):
+        if isinstance(pack_item,(StringType,IntType,float,LongType,StarTuple,StarList)):
            if isinstance(pack_item,StringType):
                thisstring = self._formatstring(pack_item) #no spaces yet
-               if '\n' in thisstring:    #must have semicolon digraph then 
+               if '\n' in thisstring:    #must have semicolon digraph then
                    curstring = curstring + thisstring
                    curstring = curstring + (' ' * indent)
                    thisstring = ''
-           else: 
+           else:
                thisstring = '%s' % str(pack_item)
            if len(curstring) + len(thisstring)> self.wraplength-2: #past end of line with space
                curstring = curstring + '\n' #add the space
                curstring = curstring + (' ' * indent) + thisstring
-           else: 
+           else:
                curstring = curstring + ' ' + thisstring
         # Now, for each nested loop we call ourselves again
         # After first outputting the current line
@@ -702,7 +702,7 @@ class LoopBlock:
            # stop_ is not issued at the end of each innermost packet
            if isinstance(pack_item[0],(ListType,TupleType)):
                curstring = curstring + ' stop_ '
-        return curstring          
+        return curstring
 
     def _formatstring(self,instring):
         import string
@@ -728,11 +728,11 @@ class LoopBlock:
                 outstring = outstring + instring + '\n;\n'
                 break
             else:                             # find a space
-                for letter in range(self.maxoutlength-1,self.wraplength-1,-1): 
+                for letter in range(self.maxoutlength-1,self.wraplength-1,-1):
                     if instring[letter] in ' \t\f': break
                 outstring = outstring + instring[:letter+1]
                 outstring = outstring + '\n'
-                instring = instring[letter+1:]            
+                instring = instring[letter+1:]
         return outstring
 
 
@@ -766,10 +766,10 @@ class StarBlock(LoopBlock):
     def has_key(self,key):
         if key == "saves": return 1
         else: return LoopBlock.has_key(self,key)
-        
+
     def __str__(self):
         retstr = ''
-        for sb in self.saves.keys(): 
+        for sb in self.saves.keys():
             retstr = retstr + '\nsave_%s\n\n' % sb
             self.saves[sb].SetOutputLength(self.wraplength,self.maxoutlength)
             retstr = retstr + str(self.saves[sb])
@@ -786,19 +786,19 @@ class BlockCollection:
         self.type_tag = type_tag
         self.lower_keys = []              # for efficiency
         self.element_class = element_class
-        if isinstance(datasource,(DictType,BlockCollection)):
+        if isinstance(datasource,(dict,BlockCollection)):
             for key,value in datasource.items():
                 if value.__class__ == element_class:
                     self[key]=value
                 else:
                     self[key]= element_class(value)
         self.header_comment = ''
-     
+
     def __str__(self):
         return self.WriteOut()
 
     def __setitem__(self,key,value):
-        if isinstance(value,(self.element_class,DictType)):
+        if isinstance(value,(self.element_class, dict)):
             self.NewBlock(key,value,replace=True)
         else: raise TypeError
         self.lower_keys.append(key.lower())
@@ -810,7 +810,7 @@ class BlockCollection:
             return self.dictionary[key]
         except KeyError:
             if key.lower() not in self.lower_keys:
-                raise KeyError, "No such item: %s" % key
+                raise(KeyError, "No such item: %s" % key)
         curr_keys = self.dictionary.keys()
         lower_ordered = map(lambda a:a.lower(),curr_keys)
         keyindex = lower_ordered.index(key.lower())
@@ -829,7 +829,7 @@ class BlockCollection:
             lower_ordered = map(lambda a:a.lower(),curr_keys)
             keyindex = lower_ordered.index(key.lower())
             del self.dictionary[curr_keys[keyindex]]
-        
+
     def __len__(self):
         return len(self.dictionary)
 
@@ -838,7 +838,7 @@ class BlockCollection:
 
     # changes to take case independence into account
     def has_key(self,key):
-        if not isinstance(key,StringType): return 0
+        if not isinstance(key, str): return 0
         if self.dictionary.has_key(key):
            return 1
         if key.lower() in self.lower_keys:
@@ -857,10 +857,10 @@ class BlockCollection:
         self.dictionary.clear()
         self.lower_keys = []
 
-    def copy(self):   
+    def copy(self):
         newcopy = self.dictionary.copy()
         return BlockCollection('',newcopy)
-     
+
     def update(self,adict):
         for key in adict.keys():
             self.dictionary[key] = adict[key]
@@ -876,7 +876,7 @@ class BlockCollection:
     def NewBlock(self,blockname,blockcontents=(),replace=False,fix=True):
         if not blockcontents:
             blockcontents = self.element_class()
-        elif isinstance(blockcontents,DictType):
+        elif isinstance(blockcontents, dict):
             blockcontents = self.element_class(blockcontents)
         if not isinstance(blockcontents,self.element_class):
             raise StarError( 'Block is not of required type %s, is %s' % self.element_class.__name__,blockcontents.__class__.__name__)
@@ -933,7 +933,7 @@ class BlockCollection:
                 elif mode=="overlay":
                     # print "Merging block %s with %s" % (basekey,key)
                     self.dictionary[basekey].merge(new_bc[key],mode,match_att=match_att)
-                else:  
+                else:
                     raise StarError( "Merge called with unknown mode %s" % mode)
 
     def get_all(self,item_name):
@@ -970,19 +970,19 @@ class StarFile(BlockCollection):
             self.my_uri = datasource.my_uri
         self.maxinlength = maxinlength      #no restriction
         if maxoutlength == 0:
-            self.maxoutlength = 2048 
+            self.maxoutlength = 2048
         else:
             self.maxoutlength = maxoutlength
-        if type(datasource) is StringType or hasattr(datasource,"read"):
+        if type(datasource) is str or hasattr(datasource,"read"):
             newself = ReadStar(datasource,self.maxinlength,**kwargs)
             # print "Reinjecting by calling %s.__init__ with kwargs %s" % (`self.__init__.im_class`,kwargs)
             self.__init__.im_class.__init__(self,datasource=newself,maxoutlength=maxoutlength,**kwargs)
         self.header_comment = \
 """#\\#STAR
 ##########################################################################
-#               STAR Format file 
+#               STAR Format file
 #               Produced by PySTARRW module
-# 
+#
 #  This is a STAR file.  STAR is a superset of the CIF file type.  For
 #  more information, please refer to International Tables for Crystallography,
 #  Volume G, Chapter 2.1
@@ -996,7 +996,7 @@ class StarError(Exception):
     def __init__(self,value):
         self.value = value
     def __str__(self):
-        return '\nStar Format error: '+ self.value 
+        return '\nStar Format error: '+ self.value
 
 class StarLengthError(Exception):
     def __init__(self,value):
@@ -1016,7 +1016,7 @@ def ReadStar(filename,maxlength=2048,dest=StarFile(),scantype='standard',grammar
     else:
         filestream = filename   #already opened for us
     my_uri = ""
-    if hasattr(filestream,"geturl"): 
+    if hasattr(filestream,"geturl"):
         my_uri = filestream.geturl()
     text = filestream.read()
     if isinstance(filename,basestring): #we opened it, we close it
@@ -1026,7 +1026,7 @@ def ReadStar(filename,maxlength=2048,dest=StarFile(),scantype='standard',grammar
         return dest
     # we recognise ctrl-Z as end of file
     endoffile = text.find('\x1a')
-    if endoffile >= 0: 
+    if endoffile >= 0:
         text = text[:endoffile]
     split = string.split(text,'\n')
     if maxlength > 0:
@@ -1034,7 +1034,7 @@ def ReadStar(filename,maxlength=2048,dest=StarFile(),scantype='standard',grammar
         if toolong:
             pos = split.index(toolong[0])
             raise StarError( 'Line %d contains more than %d characters' % (pos+1,maxlength))
-    try: 
+    try:
         if scantype == 'standard':
             parser = Y.StarParser(Y.StarParserScanner(text))
         else:
@@ -1042,28 +1042,28 @@ def ReadStar(filename,maxlength=2048,dest=StarFile(),scantype='standard',grammar
         proto_star = getattr(parser,"input")()
     except Y.yappsrt.SyntaxError:
         errorstring = 'Syntax error in input file: last value parsed was %s' % Y.lastval
-        errorstring = errorstring + '\nParser status: %s' % `parser._scanner`
+        errorstring = errorstring + '\nParser status: {}'.format(parser._scanner)
         raise StarError( errorstring)
     # duplication check on all blocks
     audit_result = map(lambda a:(a,proto_star[a].audit()),proto_star.keys())
     audit_result = filter(lambda a:len(a[1])>0,audit_result)
     if audit_result:
-        raise StarError( 'Duplicate keys as follows: %s' % `audit_result`)
+        raise StarError( 'Duplicate keys as follows: {}'.format(audit_result))
     proto_star.set_uri(my_uri)
     return proto_star
 
 def get_dim(dataitem,current=0,packlen=0):
-    zerotypes = [IntType, LongType, 
-                    FloatType, StringType]
+    zerotypes = [IntType, LongType,
+                    float, str]
     if type(dataitem) in zerotypes:
         return current, packlen
     if not dataitem.__class__ == ().__class__ and \
        not dataitem.__class__ == [].__class__:
        return current, packlen
-    elif len(dataitem)>0: 
+    elif len(dataitem)>0:
     #    print "Get_dim: %d: %s" % (current,`dataitem`)
         return get_dim(dataitem[0],current+1,len(dataitem))
     else: return current+1,0
-    
+
 
 

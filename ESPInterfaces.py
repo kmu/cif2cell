@@ -19,7 +19,7 @@
 #               reads CIF and outputs to the ESP's. Supported programs are: ABINIT, CASTEP,
 #               CPMD, Crystal09, Elk, EMTO, Exciting, Fleur, Hutsepot, NCOL, Quantum Espresso,
 #               RSPt, Siesta, VASP, xyz
-#               
+#
 #  Author:      Torbjorn Bjorkman, torbjorn.bjorkman(at)aalto.fi
 #  Affiliation: COMP, Aaalto University School of Science,
 #               Department of Applied Physics, Espoo, Finland
@@ -211,9 +211,9 @@ class ASEFile(GeometryOutputFile):
             filestring = filestring.rstrip(", ")+"],\n                ["
         filestring = filestring.rstrip(",[ ]\n")+"]],\n"
         filestring += "                scale_atoms = %s)\n"%str(not self.cartesian)
-        
+
         return filestring
-    
+
 ################################################################################################
 # CFG FILE
 class CFGFile(GeometryOutputFile):
@@ -271,7 +271,7 @@ class CFGFile(GeometryOutputFile):
                         filestring += str(a.position)+" %f "%(DW)+" %f "%(occ)+" %f\n"%(a.charges[sp])
                         ## filestring += str(a.position)+"\n"
         return filestring
-    
+
 ################################################################################################
 # COO FILE
 class COOFile(GeometryOutputFile):
@@ -297,7 +297,7 @@ class COOFile(GeometryOutputFile):
             for b in a:
                 filestring += str(b.position)+" %3i  0.500 0.000 1.000\n"%(ed.elementnr[b.spcstring()])
         return filestring
-    
+
 ################################################################################################
 # XYZ FILE
 class XYZFile(GeometryOutputFile):
@@ -323,7 +323,7 @@ class XYZFile(GeometryOutputFile):
                 t = Vector(mvmult3(lv,b.position))
                 filestring += str(b).split()[0]+"  "+str(t)+"\n"
         return filestring
-    
+
 ################################################################################################
 # NCOL FILES
 class OldNCOLFile(GeometryOutputFile):
@@ -500,7 +500,7 @@ class BSTRFile(GeometryOutputFile):
             it += 1
         filestring += "LAMDA....=    2.5000 AMAX....=    5.5000 BMAX....=    5.5000\n"
         return filestring
-    
+
 ################################################################################################
 # RSPT FILES
 class CellgenFile(GeometryOutputFile):
@@ -719,7 +719,7 @@ class SymtFile2(GeometryOutputFile):
             for j in range(3):
                 tmpstring += "%19.15f "%(self.cell.latticevectors[j][i]*fac)
             tmpstring += "\n"
-        filestring += tmpstring            
+        filestring += tmpstring
         filestring += "# Spin axis\n"
         filestring += "spinaxis\n"
         filestring += "%19.15f %19.15f %19.15f  l\n"%(self.spinaxis[0],self.spinaxis[1],self.spinaxis[2])
@@ -1325,7 +1325,7 @@ class CASTEPFile(GeometryOutputFile):
             filestring += "# Symm. op. %i\n"%k
             filestring += str(op)
             k += 1
-        filestring += "%ENDBLOCK SYMMETRY_OPS\n"        
+        filestring += "%ENDBLOCK SYMMETRY_OPS\n"
         return filestring
 
 ################################################################################################
@@ -1448,7 +1448,7 @@ class PWSCFFile(GeometryOutputFile):
         if self.setupall:
             filestring += "\n# k-space resolution ~"+str(self.kresolution)+"/A.\n"
             # Opt for gamma-point run if possible
-            if self.kgrid[0]*self.kgrid[1]*self.kgrid[2] == 1:                
+            if self.kgrid[0]*self.kgrid[1]*self.kgrid[2] == 1:
                 filestring += "K_POINTS gamma\n"
             else:
                 filestring += "K_POINTS automatic\n"
@@ -1476,7 +1476,7 @@ class PWSCFFile(GeometryOutputFile):
                     return 4
                 elif setting == 'R':
                     return 5
-        
+
 ################################################################################################
 # CP2K
 class CP2KFile(GeometryOutputFile):
@@ -1509,7 +1509,7 @@ class CP2KFile(GeometryOutputFile):
             for b in a:
                 filestring += b.spcstring()+str(Vector(mvmult3(self.cell.latticevectors,b.position)).scalmult(self.cell.lengthscale))+"\n"
         filestring += "&END COORD\n"
-        return filestring 
+        return filestring
 
 ################################################################################################
 class CPMDFile(GeometryOutputFile):
@@ -1741,7 +1741,7 @@ class ABINITFile(GeometryOutputFile):
         filestring += xredstring
         filestring = filestring[:-2]+rbrace+" \n"
         return filestring
-    
+
 ################################################################################################
 class AIMSFile(GeometryOutputFile):
     """
@@ -1775,7 +1775,7 @@ class AIMSFile(GeometryOutputFile):
                 else:
                     filestring += "atom_frac  "+str(b.position)+" "+b.spcstring()+"\n"
         return filestring
-        
+
 ################################################################################################
 #UNFINISHED!
 class MCSQSFile(GeometryOutputFile):
@@ -1805,7 +1805,7 @@ class MCSQSFile(GeometryOutputFile):
                 for k,v in b.species.iteritems():
                     filestring += k+"="+str(v)
         return filestring
-        
+
 ################################################################################################
 class POSCARFile(GeometryOutputFile):
     """
@@ -1875,7 +1875,7 @@ class POSCARFile(GeometryOutputFile):
                         [0, 1, 0],
                         [0, 0, 1]]
         lattice = mmmult3(transmtx,lattice)
-                
+
         # For output of atomic positions
         a = self.cell.lengthscale
         positionunits = ""
@@ -2013,7 +2013,7 @@ class KPOINTSFile:
         tmp += str(self.kgrid[0])+" "+str(self.kgrid[1])+" "+str(self.kgrid[2])+"\n"
         tmp += "0 0 0\n"
         return tmp
-        
+
 class INCARFile:
     """
     Class for representing and outputting a INCAR file for VASP.
@@ -2092,7 +2092,7 @@ class INCARFile:
                 if os.path.exists(potcarfile):
                     potcars[a] = potcarfile
                     specieslist.append(a)
-                    break        
+                    break
         # get maximal encut and number of electrons from potcars
         enmaxs = dict([])
         zvals = dict([])
@@ -2131,7 +2131,7 @@ class INCARFile:
         # NBANDS is max of the default VASP definition and occupied bands+20
         natoms = sum([len(a) for a in self.cell.atomdata])
         self.nbands = max(max(max(int(math.ceil(nelect/2))+int(natoms/2),3), math.ceil(0.6*nelect))+nmag, nstates+20)
-            
+
     def __str__(self):
         tmp = self.docstring
         tmp += "ENCUT = "+str(self.maxencut*self.encutfac)+"\n"
@@ -2158,10 +2158,10 @@ class INCARFile:
             tmp += "\n"
             tmp += "LVCADER = .True.\n"
         return tmp
-        
+
 
 ################################################################################################
-# EMTO 
+# EMTO
 class KFCDFile(GeometryOutputFile):
     """
     Class for storing the geometrical data needed in a [filename].dat file for the kfcd program
@@ -2566,7 +2566,7 @@ class XBandSysFile(GeometryOutputFile):
                      self.cell.spacegroupsetting == 'C':
                 filestring += "3  monoclinic  primitive      2/m    C_2h\n"
             else:
-                print "xband only knows primitive and base-centered monoclinic settings!"
+                print("xband only knows primitive and base-centered monoclinic settings!")
                 sys.exit(43)
         elif self.cell.crystal_system() == 'orthorhombic':
             if self.cell.spacegroupsetting == 'P':
@@ -2579,7 +2579,7 @@ class XBandSysFile(GeometryOutputFile):
             elif self.cell.spacegroupsetting == "F":
                 filestring += "7  orthorombic face-centered  mmm    D_2h\n"
             else:
-                print "xband does not know %1s centering of an orthorhombic cell."%self.cell.spacegroupsetting
+                print("xband does not know %1s centering of an orthorhombic cell."%self.cell.spacegroupsetting)
                 sys.exit(43)
         elif self.cell.crystal_system() == "tetragonal":
             if self.cell.spacegroupsetting == "P":
@@ -2587,7 +2587,7 @@ class XBandSysFile(GeometryOutputFile):
             elif self.cell.spacegroupsetting == "I":
                 filestring += "9  tetragonal  body-centered  4/mmm  D_4h\n"
             else:
-                print "xband only knows primitive and body-centered tetragonal settings!"
+                print("xband only knows primitive and body-centered tetragonal settings!")
                 sys.exit(43)
         elif self.cell.crystal_system() == "trigonal":
             filestring += "10 trigonal    primitive      -3m    D_3d\n"
@@ -2601,7 +2601,7 @@ class XBandSysFile(GeometryOutputFile):
             elif self.cell.spacegroupsetting == "I":
                 filestring += "14 cubic       body-centered  m3m    O_h \n"
             else:
-                print "xband does not know %1s centering of a cubic cell."%self.cell.spacegroupsetting
+                print("xband does not know %1s centering of a cubic cell."%self.cell.spacegroupsetting)
                 sys.exit(43)
         filestring += "space group number (ITXC and AP)\n"
         filestring += "%5i%5i"%(self.cell.spacegroupnr,Number2AP[self.cell.spacegroupnr])+"\n"
@@ -2913,4 +2913,4 @@ class MOPACFile(GeometryOutputFile):
         for l in lv:
             filestring += "Tv  "+str(l)+"\n"
         return filestring
-    
+

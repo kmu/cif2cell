@@ -44,7 +44,7 @@
 # Convert Hermann-Mauguin symbol to Hall symbol
 # Just keep adding new HM string representations until we support everything.
 # The ICSD convention of denoting setting shifted from the origin with S and
-# the non-shifted with Z is fully supported. 
+# the non-shifted with Z is fully supported.
 HM2Hall = {
     #   1
     'P1' : 'P 1',
@@ -373,7 +373,7 @@ HM2Hall = {
     'C2/c:-b1' : '-A 2ya',
     'C2/c-b1' : '-A 2ya',
     'A12/a1' : '-A 2ya',
-    'A2/a' : '-A 2ya',    
+    'A2/a' : '-A 2ya',
     'C2/c:-b2' : '-C 2ybc',
     'C2/c-b2' : '-C 2ybc',
     'C12/n1' : '-C 2ybc',
@@ -687,7 +687,7 @@ HM2Hall = {
     #  61
     'Pbca' : '-P 2ac 2ab',
     'P21/b21/c21/a' : '-P 2ac 2ab',
-    'Pcab' : '-P 2bc 2ac',    
+    'Pcab' : '-P 2bc 2ac',
     #  62
     'Pnma' : '-P 2ac 2n',
     'Pmnb' : '-P 2bc 2a',
@@ -3090,7 +3090,7 @@ Rhomb2HexHall = { 'P 3*'     : 'R 3',
                   '-P 3* 2n' : '-R 3 2"c'}
 
 Hex2RhombHall = dict([])
-for k,v in Rhomb2HexHall.iteritems():
+for k,v in Rhomb2HexHall.items():
     Hex2RhombHall[v] = k
 
 # A. Perlov's numbering -> international tables numbers
@@ -11543,5 +11543,5 @@ SymOpsHall = {
                    ['x+1/2', 'y', 'z+1/2'],
                    ['x+1/2', 'y+1/2', 'z']]
     }
-    
-    
+
+
