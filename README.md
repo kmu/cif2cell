@@ -1,8 +1,8 @@
+[![Build Status](https://travis-ci.com/kmu/cif2cell.svg?branch=master)](https://travis-ci.com/kmu/cif2cell)
+
 # Python 3 Support
 
 * Original version of cif2cell (https://sourceforge.net/projects/cif2cell/) is modified for compatibility with Python 3.
-
-[![Build Status](https://travis-ci.com/kmu/cif2cell.svg?branch=master)](https://travis-ci.com/kmu/cif2cell)
 
 ## INSTALLATION
 
@@ -85,7 +85,11 @@ python setup.py install
 To choose a different location, add
 --prefix=where/you/want/it
 to the above line. For help and more options type
+
+```
 python setup.py --help
+
+```
 
 The installation will also create a directory $PREFIX/lib/cif2cell
 that contains the manual and sample cif files.
@@ -99,9 +103,13 @@ $PREFIX/lib/cif2cell/docs directory.
 
 ## RUNNING
 
-Run 'cif2cell -h' to get a listing of the different options.
+Run `cif2cell -h` to get a listing of the different options.
 Example:
+
+```
 cif2cell Ni20Mn3P6.cif -p vasp --vasp-cartesian-positions
+```
+
 will generate a POSCAR file for VASP with the positions in cartesian format.
 
 
