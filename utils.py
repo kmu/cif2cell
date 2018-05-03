@@ -63,7 +63,7 @@ codename = { 'abinit' : 'ABINIT',
              'xyz' : 'xyz',
              'pwscf' : 'PWscf',
              'quantum-espresso' : 'Quantum Espresso'}
-             
+
 # Make a list of safe functions for use in safe_matheval. Thanks Lybniz developers!
 safe_list = ['math','acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh', 'e', 'exp', 'fabs', 'floor', 'fmod', 'frexp', 'hypot', 'ldexp', 'log', 'log10', 'modf', 'pi', 'pow', 'radians', 'sin', 'sinh', 'sqrt', 'tan', 'tanh']
 safe_dict = dict([ (k, locals().get(k, None)) for k in safe_list ])
@@ -83,25 +83,25 @@ class PositionError(Exception):
         self.value = value
     def __str__(self):
         return repr(self.value)
-    
+
 class CellError(Exception):
     def __init__(self, value):
         self.value = value
     def __str__(self):
         return repr(self.value)
-    
+
 class GeometryObjectError(Exception):
     def __init__(self, value):
         self.value = value
     def __str__(self):
         return repr(self.value)
-    
+
 class SetupError(Exception):
     def __init__(self, value):
         self.value = value
     def __str__(self):
         return repr(self.value)
-    
+
 ################################################################################################
 class GeometryObject:
     """
@@ -127,7 +127,7 @@ class CellFloat(float, GeometryObject):
             return False
         else:
             return True
-        
+
 class Charge(float):
     """
     Class for representing the charge state/oxidation number of an atom (ion).
@@ -308,7 +308,7 @@ class LatticeMatrix(GeometryObject, list):
             for j in range(3):
                 t[i].append(improveprecision(self[i][j],self.compeps))
         return LatticeMatrix(t)
-                            
+
 class AtomSite(GeometryObject):
     """
     Class for describing an atomic site.
@@ -327,11 +327,11 @@ class AtomSite(GeometryObject):
         distance  : distance to some other atom
         spcstring : species string ('Mn', 'La/Sr' ...)
         alloy     : true if there are more than one species occupying the site
-        
+
     """
     def __init__(self,position=None,species=None,label="",charges=None,index=None):
         GeometryObject.__init__(self)
-        if position != None:
+        if not position is None:
             self.position = LatticeVector(position)
         else:
             self.position = None
@@ -475,7 +475,7 @@ class SymmetryOperation(GeometryObject):
                 elif i.strip("+-") == 'y':
                     mat[1][j] = float(i.strip('y')+"1")
                 elif i.strip("+-") == 'z':
-                    mat[2][j] = float(i.strip('z')+"1")            
+                    mat[2][j] = float(i.strip('z')+"1")
         return LatticeMatrix(mat)
     # Return a translation vector from "x,y,z" representation of a symmetry operation
     def transvec(self):
@@ -516,7 +516,7 @@ settingname = { 'P' : 'primitive',
                 'I' : 'body-centered',
                 'F' : 'face-centered',
                 'R' : 'rhombohedral' }
-        
+
 ################################################################################################
 # Functions
 # Evaluate expr safely, i.e. only allow execution of mathematical functions
@@ -532,7 +532,7 @@ def removeerror(string):
 # Guess the "true" values of some conspicuous numbers
 def improveprecision(x,eps):
     for f in floatlist:
-        if abs(abs(x)-f) <= eps:                
+        if abs(abs(x)-f) <= eps:
             # 0
             return copysign(f,x)
     # if no match found, return x
