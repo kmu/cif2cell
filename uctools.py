@@ -1052,7 +1052,8 @@ class CellData(GeometryObject):
         for HMid in ['_symmetry_space_group_name_H-M','_space_group_name_H-M_alt']:
             try:
                 # self.HMSymbol=cifblock[HMid].translate(str.maketrans("", ""),str.whitespace)
-                self.HMSymbol=cifblock[HMid]
+                self.HMSymbol=cifblock[HMid].replace(" ", "")
+                # self.HMSymbol=cifblock[HMid]
             except:
                 pass
 
