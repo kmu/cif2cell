@@ -184,7 +184,7 @@ parser.add_option_group(progspec)
 
 # Print version number and exit
 if options.version:
-    print programname+" version "+version
+    print(programname+" version "+version)
     sys.exit(0)
 
 #############################################################
@@ -210,7 +210,7 @@ if options.supercellmap and options.supercelldims:
 if options.program:
     outputprogram = options.program.lower()
     if not outputprogram in outputprograms:
-        print "Error: Unknown output format: "+outputprogram
+        print("Error: Unknown output format: "+outputprogram)
         sys.exit(1)
     # Quantum Espresso is just an alias...
     if outputprogram == 'quantum-espresso':
@@ -311,7 +311,7 @@ if options.celltransformation or options.cubediagz or options.rhombdiag:
     transformcell = True
 else:
     transformcell = False
-    
+
 #################################################################
 # Open and read CIF file
 cif_file = None
@@ -332,19 +332,19 @@ if cif_file:
     else:
         cif_grammar = '1.1'
     # Skip validation for now... it causes too much trouble.
-    ## cdic = CifFile.CifDic("cif_core.dic",grammar='1.1')     
+    ## cdic = CifFile.CifDic("cif_core.dic",grammar='1.1')
     ## val_results = CifFile.validate(cif_file,dic=cdic)
     ## print validate_report(val_results)
     ## val_report = CifFile.ValidationResult(val_results)
     try:
         cf = CifFile.ReadCif(cif_file,grammar=cif_grammar)
-    except Exception, e:
+    except Exception as e:
         # test if data_ statement in the beginning is missing
         try:
             f = open(cif_file,'r')
             lines = f.readlines()
             f.close()
-            tmpname = cif_file.replace('.cif','_tmp.cif') 
+            tmpname = cif_file.replace('.cif','_tmp.cif')
             f = open(tmpname,'w')
             f.write("data_default\n")
             for line in lines:
@@ -399,7 +399,7 @@ if makesupercell:
         supercellpostvactransvec = safe_matheval(options.supercellpostvactransvec)
     else:
         supercellpostvactransvec = [0,0,0]
-    # 
+    #
     if options.supercellsort:
         supercellsort = options.supercellsort.lower()
     else:
@@ -419,7 +419,7 @@ else:
 ref = ReferenceData()
 ref.getFromCIF(cb)
 if bibtexref:
-    print ref.bibtexref()
+    print(ref.bibtexref())
     sys.exit(0)
 # Get cell data
 cd = CellData()
@@ -431,13 +431,13 @@ if options.coordtol:
     cd.coordepsilon = float(options.coordtol)
 try:
     cd.getFromCIF(cb)
-except PositionError, e:
+except PositionError as e:
     sys.stderr.write("***Error: cell setup: "+e.value+"\n")
     sys.exit(2)
-except CellError, e:
+except CellError as e:
     sys.stderr.write("***Error: cell setup: "+e.value+"\n")
     sys.exit(2)
-except SymmetryError, e:
+except SymmetryError as e:
     sys.stderr.write("***Error: cell setup: "+e.value+"\n")
     sys.exit(2)
 
@@ -449,10 +449,10 @@ try:
         cd.primitive()
     else:
         cd.conventional()
-except SymmetryError, e:
+except SymmetryError as e:
     sys.stderr.write("***Error: cell setup: "+e.value+"\n")
     sys.exit(2)
-except CellError, e:
+except CellError as e:
     sys.stderr.write("***Error: cell setup: "+e.value+"\n")
     sys.exit(2)
 
@@ -477,7 +477,7 @@ if options.randomdisp and not makesupercell:
         distr = "uniform"
     try:
         cd.randomDisplacements(float(options.randomdisp),distribution=distr)
-    except SetupError, e:
+    except SetupError as e:
         sys.stderr.write("***Error: random displacements: "+e.value+"\n")
         sys.exit(3)
     # Reset space group operations
@@ -488,8 +488,8 @@ if options.randomdisp and not makesupercell:
 
 # Print cell
 if verbose or not options.program and not options.quiet:
-    print string.upper(programname)+" "+version
-    print datestring
+    print(string.upper(programname)+" "+version)
+    print(datestring)
     # Print compound
     compoundstring = "Output for "
     if ref.cpd == "" and ref.compound == "":
@@ -498,12 +498,12 @@ if verbose or not options.program and not options.quiet:
         compoundstring += ref.cpd
     if ref.compound != "":
         compoundstring += " ("+ref.compound+")"
-    print compoundstring
+    print(compoundstring)
     # Print database
-    print ref.databasestring
+    print(ref.databasestring)
     if cd.alloy and forcealloy and options.program:
-        print "\nEnforcing generation of file(s) for "+outputprogram+" for an alloy."
-    print "\n BIBLIOGRAPHIC INFORMATION"
+        print("\nEnforcing generation of file(s) for "+outputprogram+" for an alloy.")
+    print("\n BIBLIOGRAPHIC INFORMATION")
     refstrings = ref.referencestring().split()
     tmpstring = ""
     i = 0
@@ -512,31 +512,31 @@ if verbose or not options.program and not options.quiet:
             tmpstring += refstrings[i]+" "
             i += 1
         else:
-            print tmpstring
+            print(tmpstring)
             tmpstring = ""
     if tmpstring != "":
-        print tmpstring
-    print "\n INPUT CELL INFORMATION"
-    print "Symmetry information:"
+        print(tmpstring)
+    print("\n INPUT CELL INFORMATION")
+    print("Symmetry information:")
     if inputcell.HallSymbol != "":
-        print inputcell.crystal_system()[0].upper()+inputcell.crystal_system()[1:]+" crystal system."
-        print "Space group number     : ".rjust(2)+str(inputcell.spacegroupnr)
-        print "Hall symbol            : "+inputcell.HallSymbol
-        print "Hermann-Mauguin symbol : "+inputcell.HMSymbol
+        print(inputcell.crystal_system()[0].upper()+inputcell.crystal_system()[1:]+" crystal system.")
+        print("Space group number     : ".rjust(2)+str(inputcell.spacegroupnr))
+        print("Hall symbol            : "+inputcell.HallSymbol)
+        print("Hermann-Mauguin symbol : "+inputcell.HMSymbol)
     else:
-        print "No space group information found."
+        print("No space group information found.")
     # only print these if verbose
     if verbose:
-        print "Symmetry equivalent sites:"
+        print("Symmetry equivalent sites:")
         symops = list(inputcell.symops)
         symops.sort()
         for i in range(len(symops)):
-            print "%4i  %8s, %8s, %8s" % (i+1, symops[i].eqsite[0], symops[i].eqsite[1], symops[i].eqsite[2])
-    print "\nLattice parameters:"
+            print("%4i  %8s, %8s, %8s" % (i+1, symops[i].eqsite[0], symops[i].eqsite[1], symops[i].eqsite[2]))
+    print("\nLattice parameters:")
     tmpstring = ""
     for i in ["a", "b", "c"]:
         tmpstring += i.rjust(decpos)+" "
-    print tmpstring
+    print(tmpstring)
     formatstring = ""
     if options.printau:
         ## aprint = inputcell.ainit*angtobohr
@@ -554,12 +554,12 @@ if verbose or not options.program and not options.quiet:
         cprint = inputcell.c
     for i in range(3):
         formatstring = formatstring+decform+" "
-    print formatstring % (aprint, bprint, cprint)
+    print(formatstring % (aprint, bprint, cprint))
     tmpstring = ""
     for i in ["alpha", "beta", "gamma"]:
         tmpstring += i.rjust(decpos)+" "
-    print tmpstring
-    print formatstring % (inputcell.alpha, inputcell.beta, inputcell.gamma)
+    print(tmpstring)
+    print(formatstring % (inputcell.alpha, inputcell.beta, inputcell.gamma))
     ## print formatstring % (inputcell.alphainit, inputcell.betainit, inputcell.gammainit)
     # Pretty printing in columns that need to have variable width
     # w1 = width of the atomic species column
@@ -589,7 +589,7 @@ if verbose or not options.program and not options.quiet:
                 w1 = max(w1,len(tmpstring1))
                 w3 = max(w3,len(tmpstring2))
                 w4 = max(w4,len(tmpstring3))
-        # small aesthetic adjustment 
+        # small aesthetic adjustment
         w1 = w1 + 1
         w3 = w3 + 2
         w4 = max(w4 + 2, 8)
@@ -604,7 +604,7 @@ if verbose or not options.program and not options.quiet:
             w4 = 0
     # Now for the output...
     tmpstring = "Representative sites :"
-    print tmpstring
+    print(tmpstring)
     siteheader = "Atom".ljust(w1)+" "
     if options.printcart:
         transmtx = []
@@ -628,7 +628,7 @@ if verbose or not options.program and not options.quiet:
             siteheader += "occ.".rjust(w3)
     if printcharges:
         siteheader += " "+"charge".rjust(w4)
-    print siteheader
+    print(siteheader)
     # Representative sites
     for i in range(len(inputcell.ineqsites)):
         tmpstring = ""
@@ -650,27 +650,27 @@ if verbose or not options.program and not options.quiet:
             tmpstring += " "+occstring.rjust(w3)
         if printcharges:
             tmpstring += " "+chargestring.rjust(w4)
-        print tmpstring
+        print(tmpstring)
 
     # Output cell
-    print "\n OUTPUT CELL INFORMATION"
-    print "Symmetry information:"
+    print("\n OUTPUT CELL INFORMATION")
+    print("Symmetry information:")
     if cd.HallSymbol != "":
-        print cd.crystal_system()[0].upper()+cd.crystal_system()[1:]+" crystal system."
-        print "Space group number     : ".rjust(2)+str(cd.spacegroupnr)
-        print "Hall symbol            : "+cd.HallSymbol
-        print "Hermann-Mauguin symbol : "+cd.HMSymbol
+        print(cd.crystal_system()[0].upper()+cd.crystal_system()[1:]+" crystal system.")
+        print("Space group number     : ".rjust(2)+str(cd.spacegroupnr))
+        print("Hall symbol            : "+cd.HallSymbol)
+        print("Hermann-Mauguin symbol : "+cd.HMSymbol)
     else:
-        print "No space group information found."
+        print("No space group information found.")
     # only print these if verbose
     if verbose:
-        print "Symmetry equivalent sites:"
+        print("Symmetry equivalent sites:")
         symops = list(cd.symops)
         symops.sort()
         for i in range(len(symops)):
-            print "%4i  %8s, %8s, %8s" % (i+1, symops[i].eqsite[0], symops[i].eqsite[1], symops[i].eqsite[2])
+            print("%4i  %8s, %8s, %8s" % (i+1, symops[i].eqsite[0], symops[i].eqsite[1], symops[i].eqsite[2]))
 
-    print ""
+    print("")
     cd.printCell(printcart=options.printcart, printdigits=printdigits, printcharges=options.printcharges)
     # Print volume and density
     if options.printau:
@@ -679,7 +679,7 @@ if verbose or not options.program and not options.quiet:
     else:
         volume = cd.volume()*cd.lengthscale**3
         volstring = "A"
-    print "\nUnit cell volume  : "+decform%volume+" "+volstring+"^3"
+    print("\nUnit cell volume  : "+decform%volume+" "+volstring+"^3")
     try:
         weight = 0.0
         for a in cd.atomdata:
@@ -687,7 +687,7 @@ if verbose or not options.program and not options.quiet:
                 for k,v in b.species.iteritems():
                     weight += ed.elementweight[k]*v
         density = weight/volume
-        print "Unit cell density : "+decform%density+" u/"+volstring+"^3 = "+decform%(density*uperautogpercm)+" g/cm^3"
+        print("Unit cell density : "+decform%density+" u/"+volstring+"^3 = "+decform%(density*uperautogpercm)+" g/cm^3")
     except:
         if not options.quiet:
             sys.stderr.write("***Warning: Error printing unit cell density.\n")
@@ -706,7 +706,7 @@ if transformcell:
             if not force:
                 sys.stderr.write("          Use --force to go ahead anyway.\n")
                 sys.exit(1)
-            
+
     if options.rhombdiag:
         # Put z direction along pseudocubic [111]. Kind of the opposite of the cubediagz.
         t = 1/cd.latticevectors[0].length()   # Normalization to 1
@@ -724,13 +724,13 @@ if transformcell:
         celltransformation = safe_matheval(options.celltransformation)
     try:
         cd.transformCell(celltransformation)
-    except CellError, e:
+    except CellError as e:
         sys.stderr.write("***Error: Cell transformation: "+e.value+"\n")
         sys.exit(2)
     if verbose or not options.program and not options.quiet:
-        print "\n TRANSFORMED CELL"
+        print("\n TRANSFORMED CELL")
         cd.printCell(printcart=options.printcart, printdigits=printdigits, printcharges=options.printcharges)
-    
+
 ##############################################
 # Generate supercell
 if makesupercell:
@@ -750,7 +750,7 @@ if makesupercell:
                 supercellmap[i].append(int(round(t2[i][j])))
     try:
         cd.getSuperCell(supercellmap,supercellvacuum,supercellprevactransvec,postvactransvec=supercellpostvactransvec,sort=supercellsort)
-    except CellError, e:
+    except CellError as e:
         sys.stderr.write("***Error: Supercell setup: "+e.value+"\n")
         sys.exit(2)
     # Randomly displace atoms if requested. This erases all symmetry operations.
@@ -761,42 +761,42 @@ if makesupercell:
             distr = "uniform"
         try:
             cd.randomDisplacements(float(options.randomdisp),distribution=distr)
-        except SetupError,e:
+        except SetupError as e:
             sys.stderr.write("***Error: random displacements: "+e.value+"\n")
             sys.exit(3)
         cd.symops = set([SymmetryOperation(['x','y','z'])])
-    
+
     # Print supercell
     if verbose or not options.program and not options.quiet:
-        print "\n SUPERCELL INFORMATION"
+        print("\n SUPERCELL INFORMATION")
         cd.printCell(printcart=options.printcart, printdigits=printdigits, printcharges=options.printcharges)
-        
+
 if printsymops or printseitz or verbose:
     # Print symmetry operations. Need to make list of it to control order.
     symoplist = sorted(list(cd.symops))
     if printsymops or verbose:
-        print "\nSymmetry operations : "
-        print "  3x3 rotation matrix +"
-        print "  3x1 translation vector"
+        print("\nSymmetry operations : ")
+        print("  3x3 rotation matrix +")
+        print("  3x1 translation vector")
         i = 1
         for op in symoplist:
-            print "Operation "+str(i)
+            print("Operation "+str(i))
             for v in op.rotation:
-                print threedecs%(v[0],v[1],v[2])
-            print threedecs%(op.translation[0],op.translation[1],op.translation[2])
+                print(threedecs%(v[0],v[1],v[2]))
+            print(threedecs%(op.translation[0],op.translation[1],op.translation[2]))
             i += 1
     if printseitz:
-        print "\nSymmetry operations :"
-        print "  In Seitz matrix form"
+        print("\nSymmetry operations :")
+        print("  In Seitz matrix form")
         i = 1
         for op in symoplist:
-            print "Operation "+str(i)
+            print("Operation "+str(i))
             tmpstring = ""
             for j in range(3):
                 tmpstring += fourdecs%(op.rotation[j][0],op.rotation[j][1],op.rotation[j][2],op.translation[j])+"\n"
             tmpstring += fourdecs%(0,0,0,1)
-            print tmpstring
-            i += 1    
+            print(tmpstring)
+            i += 1
 
 # Remind that the result may be junk when using --force
 if force:
@@ -897,18 +897,18 @@ else:
 # Print output filename to screen
 if outputprogram !="":
     if (verbose or options.filenamequery) and outputfile != "":
-        print "Data will be written to the file "+outputfile
+        print("Data will be written to the file "+outputfile)
 
 ################################################################################################
 # stuff that should be printed irrespective of the verbose flag
 if cd.alloy and forcealloy and options.program and not verbose:
     tmpstring = "Enforcing file generation for alloy. "
     if outputprogram == 'bstr' or outputprogram == 'vasp' or outputprogram == 'cpmd':
-        print tmpstring
+        print(tmpstring)
     else:
         tmpstring += "Warning! The file(s) will be incomplete!"
-        print tmpstring
-    
+        print(tmpstring)
+
 ################################################################################################
 # Stop here if no specific output was requested
 if not options.program:
@@ -916,12 +916,12 @@ if not options.program:
 
 # Don't generate output for alloys (for most programs)
 if cd.alloy and not forcealloy and not (outputprogram in alloyprograms or outputprogram in vcaprograms):
-    print "Error: This system is an alloy, but "+codename[outputprogram]+" has no way of dealing with alloys.\n       Run again with --force-alloy (or --force) if you want to generate an (incomplete) output file anyway."
+    print("Error: This system is an alloy, but "+codename[outputprogram]+" has no way of dealing with alloys.\n       Run again with --force-alloy (or --force) if you want to generate an (incomplete) output file anyway.")
     sys.exit(17)
 # Deal with VCA
 if cd.alloy and outputprogram in vcaprograms:
     if not options.vca and not forcealloy:
-        print "Error: This system is an alloy. "+codename[outputprogram]+" can deal with some alloys using the virtual crystal approximation (VCA).\n       Run again with the flag --vca if you want to produce a VCA setup."
+        print("Error: This system is an alloy. "+codename[outputprogram]+" can deal with some alloys using the virtual crystal approximation (VCA).\n       Run again with the flag --vca if you want to produce a VCA setup.")
         sys.exit(17)
 vcawarning1 = False
 vcawarning2 = False
@@ -943,7 +943,7 @@ if options.vca:
         sys.stderr.write("Warning: You are setting up a VCA calculation for an alloy with more than two components.\n         Make sure that you know what you are doing!\n")
     elif vcawarning2:
         sys.stderr.write("Warning: You are setting up a VCA calculation but not all alloy sites are occupied by species\n         from neighbouring groups in the periodic table. Make sure that you know what you are doing!\n")
-        
+
 # Function for printing a standard docstring
 def StandardDocstring():
     cif2cellstring = ' T. Bjorkman, Comp. Phys. Commun. 182, 1183-1186 (2011). Please cite generously.'
@@ -981,12 +981,12 @@ if outputprogram == 'cif':
         a = Vector(cd.latticevectors[0].scalmult(cd.lengthscale))
         b = Vector(cd.latticevectors[1].scalmult(cd.lengthscale))
         c = Vector(cd.latticevectors[2].scalmult(cd.lengthscale))
-	cb['_cell_length_a'] = a.length()
-	cb['_cell_length_b'] = b.length()
-	cb['_cell_length_c'] = c.length()
-	cb['_cell_angle_alpha'] = acos(b.dot(c)/(b.length()*c.length()))*180/pi
-	cb['_cell_angle_beta'] = acos(a.dot(c)/(a.length()*c.length()))*180/pi
-	cb['_cell_angle_gamma'] = acos(b.dot(a)/(a.length()*b.length()))*180/pi
+        cb['_cell_length_a'] = a.length()
+        cb['_cell_length_b'] = b.length()
+        cb['_cell_length_c'] = c.length()
+        cb['_cell_angle_alpha'] = acos(b.dot(c)/(b.length()*c.length()))*180/pi
+        cb['_cell_angle_beta'] = acos(a.dot(c)/(a.length()*c.length()))*180/pi
+        cb['_cell_angle_gamma'] = acos(b.dot(a)/(a.length()*b.length()))*180/pi
         # Supercell may have broken symmetry, so just put P1
         cb['_space_group_IT_number'] = 1
         cb['_space_group_name_H-M_alt'] = "P1"
@@ -1052,11 +1052,11 @@ if outputprogram == 'abinit':
     f = open(outputfile, outmode)
     f.write(str(abinitinput))
     f.close()
-    
+
 ################################################################################################
 # Output for ASE file (python script)
 if outputprogram == 'ase':
-    # The second comment line with info from the CIF file 
+    # The second comment line with info from the CIF file
     docstring = StandardDocstring()
     # Initialize the ASEFile structure
     sysfile = ASEFile(cd, docstring)
@@ -1081,7 +1081,7 @@ if outputprogram == 'castep':
     f = open(outputfile, outmode)
     f.write(str(castepinput))
     f.close()
-    
+
 ################################################################################################
 # Output to cfg file
 if outputprogram == 'cfg':
@@ -1113,7 +1113,7 @@ if outputprogram == 'cp2k':
     f = open(outputfile, outmode)
     f.write(str(cp2kinput))
     f.close()
-    
+
 ################################################################################################
 # Output for CPMD
 if outputprogram == 'cpmd':
@@ -1122,7 +1122,7 @@ if outputprogram == 'cpmd':
     f = open(outputfile, outmode)
     f.write(str(cpmdinput))
     f.close()
-    
+
 ################################################################################################
 # Output for Crystal09
 if outputprogram == 'crystal09':
@@ -1339,7 +1339,7 @@ if outputprogram == 'kfcd' or outputprogram == 'emto':
     f.write(str(kfcdfile))
     f.close()
     if outputprogram == "kfcd":
-        sys.exit(0)        
+        sys.exit(0)
 if outputprogram == "emto":
     sys.exit(0)
 
@@ -1421,7 +1421,7 @@ if outputprogram == 'fleur':
     f = open(outputfile, outmode)
     f.write(str(fleurinput))
     f.close()
-    
+
 ################################################################################################
 # Output for mcsqs
 if outputprogram == 'mcsqs':
@@ -1463,11 +1463,11 @@ if outputprogram == 'mopac':
     f = open(outputfile, outmode)
     f.write(str(mopacinput))
     f.close()
-    
+
 ################################################################################################
 # Output for TB-LMTO program ncol
 if outputprogram == 'ncol' or outputprogram == 'bstr':
-    # Set up names for files. 
+    # Set up names for files.
     if cd.HMSymbol == "":
         bstrjobnam = ref.cpd.replace(" ", "").replace("(","").replace(")","")
     else:
@@ -1485,7 +1485,7 @@ if outputprogram == 'ncol' or outputprogram == 'bstr':
     docstring = ref.compound+", "+ref.referencestring()
     # Document details of creation
     programdoc = "Generated by "+programname+" "+version+" "+datestring
-        
+
 # Output for TB-LMTO structure constant program bstr
 if outputprogram == 'bstr' or outputprogram == 'ncol':
     # Initialize BSTRFile
@@ -1537,7 +1537,7 @@ if outputprogram == 'pwscf':
     f = open(outputfile, outmode)
     f.write(str(pwscfinput))
     f.close()
-    
+
 ################################################################################################
 # Output for VASP
 if outputprogram == 'vasp':
@@ -1570,7 +1570,7 @@ if outputprogram == 'vasp':
     f.close()
     # Print species order to screen if requested
     if options.vaspprintspcs:
-        print poscar.SpeciesOrder()
+        print(poscar.SpeciesOrder())
     # Set up all files?
     if setupall:
         # POTCAR
@@ -1582,7 +1582,7 @@ if outputprogram == 'vasp':
         if options.vasppppriority:
             prioritylist = options.vasppppriority.split(",")
             prioritylist.append("")
-            print prioritylist
+            print(prioritylist)
         else:
             try:
                 pl = os.environ['VASP_PP_PRIORITY']
@@ -1610,7 +1610,7 @@ if outputprogram == 'vasp':
         f.write(str(incarfile))
         f.close()
     sys.exit(0)
-    
+
 ################################################################################################
 # Output for RSPt
 if outputprogram == 'rspt':
@@ -1633,7 +1633,7 @@ if outputprogram == 'rspt':
             symtfile.forcenospin = True
     else:
         symtfile = SymtFile(cd, docstring)
-    # spin axis 
+    # spin axis
     if options.rsptspinaxis:
         symtfile.spinaxis = Vector(safe_matheval(options.rsptspinaxis))
     if options.rsptpasswyckoff:
@@ -1647,7 +1647,7 @@ if outputprogram == 'rspt':
     f.write(str(symtfile))
     f.close()
     sys.exit(0)
-    
+
 # Output for RSPt supercell generator cellgen
 if outputprogram == 'cellgen':
     # Construct documentation string
@@ -1682,11 +1682,11 @@ if outputprogram == 'siesta':
     f = open(outputfile, outmode)
     f.write(str(siestainput))
     f.close()
-    
+
 ################################################################################################
 # Output for SPC file
 if outputprogram == 'spc':
-    # The second comment line with info from the CIF file 
+    # The second comment line with info from the CIF file
     docstring = StandardDocstring()
     # Initialize the SPCFile structure
     sysfile = SPCFile(cd, docstring)
@@ -1717,11 +1717,11 @@ if outputprogram == 'xband' or outputprogram == 'sprkkr':
     f.write(str(sysfile))
     f.close()
     sys.exit(0)
-    
+
 ################################################################################################
 # Output for xyz file
 if outputprogram == 'xyz':
-    # The second comment line with info from the CIF file 
+    # The second comment line with info from the CIF file
     docstring =  "Generated by "+programname+" "+version
     if ref.database != "" and ref.databasecode != "":
         docstring += " from "+ref.databaseabbr[ref.database]+" reference: "+ref.databasecode
