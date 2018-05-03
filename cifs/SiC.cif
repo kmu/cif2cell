@@ -15,7 +15,7 @@ _chemical_name_systematic          'Silicon carbide'
 _chemical_name_mineral             'Moissanite 3C'
 _chemical_compound_source          'synthetic'
 _chemical_formula_structural       'Si C'
-_chemical_formula_sum              'Si'
+_chemical_formula_sum              'Si C'
 _publ_section_title
 ;
 Zur Kristallstruktur des kubischen Karborunds
