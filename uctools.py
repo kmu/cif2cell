@@ -655,7 +655,7 @@ class CellData(GeometryObject):
                     self.atomdata[i][0].charges.update(self.atomdata[j][0].charges)
                     removeindices.append(j)
                     # ...also fix self.occupations
-                    self.occupations[i][self.occupations[j].keys()[0]] = self.occupations[j].values()[0]
+                    self.occupations[i][list(self.occupations[j].keys())[0]] = list(self.occupations[j].values())[0]
         # Remove duplicate elements
         removeindices = list(set(removeindices))
         removeindices.sort(reverse=True)
@@ -731,7 +731,7 @@ class CellData(GeometryObject):
                     else:
                         self.ChemicalComposition[k] = v
         if not self.alloy:
-            L = self.ChemicalComposition.values()
+            L = list(self.ChemicalComposition.values())
             divisor = reduce(gcd,L)
             for k,v in self.ChemicalComposition.items():
                 self.ChemicalComposition[k] = v/divisor
@@ -1257,7 +1257,8 @@ class CellData(GeometryObject):
 
         # Element names
         elementsymbs = tmpdata.get('_atom_site_type_symbol')
-        if type(elementsymbs) == None or '?' in elementsymbs or '.' in elementsymbs:
+        print(elementsymbs)
+        if elementsymbs is None or '?' in elementsymbs or '.' in elementsymbs:
             elementsymbs = tmpdata.get('_atom_site_label')
             if type(elementsymbs) == None:
                 # Fill up with question marks if not found
@@ -1668,7 +1669,7 @@ class ReferenceData:
                 else:
                     self.ChemicalComposition[e] = n
             if not alloy:
-                L = self.ChemicalComposition.values()
+                L = list(self.ChemicalComposition.values())
                 divisor = reduce(gcd,L)
                 for k,v in self.ChemicalComposition.items():
                     self.ChemicalComposition[k] = v/divisor
