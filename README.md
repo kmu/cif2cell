@@ -1,10 +1,21 @@
+# Python 3 Support
+
+* Original version of cif2cell (https://sourceforge.net/projects/cif2cell/) is modified for comatibility with Python 3.
+
+# Dependency
+
+```
+pip install PyCIFRW
+```
+
+# CIF2CELL
+
 Copyright 2010, Torbjorn Bjorkman
 
-CIF2CELL
 
-A tool to generate the geometrical setup for various electronic 
-structure codes from a CIF (Crystallographic Information 
-Framework) file. The code will generate the crystal structure for 
+A tool to generate the geometrical setup for various electronic
+structure codes from a CIF (Crystallographic Information
+Framework) file. The code will generate the crystal structure for
 the primitive cell or the conventional cell.
 
 CURRENTLY SUPPORTS
@@ -28,9 +39,9 @@ cellgen            no      cellgen.inp
 elk                no      GEOMETRY.OUT
 exciting           no      input.xml
 spacegroup         no      spacegroup.in
-ncol               no      [spacegroupname/compoundname].dat 
+ncol               no      [spacegroupname/compoundname].dat
                            for bstr.
-emto               yes     [spacegroupname/compoundname].dat 
+emto               yes     [spacegroupname/compoundname].dat
                            for kstr, bmdl, shape, kgrn and kfcd
                            in separate directories.
 spr-kkr            yes     [compoundname].sys
@@ -43,8 +54,8 @@ The distribution includes:
 * The python files cif2cell, uctools.py and spacegroupdata.py
 * Installation files, setup.py and MANIFEST.
 * A manual.
-* The directory cifs/ containing a set of example CIF files 
-  as well as the crystal structures of the full periodic table 
+* The directory cifs/ containing a set of example CIF files
+  as well as the crystal structures of the full periodic table
   from COD, the Crystallography Open Database <http://www.crystallography.net>
   and also a few from ICSD (with permission).
 * The file PyCifRW-3.3.tar.gz, containing the PyCifRW package needed for
@@ -54,16 +65,16 @@ The distribution includes:
 INSTALLATION INSTRUCTIONS
 
 Prerequisites: The program requires Python 2.4 or higher and the
-               PyCIFRW python package (which will be installed 
-               automatically if not present, see below for manual 
+               PyCIFRW python package (which will be installed
+               automatically if not present, see below for manual
    	       installation instructions). Note however that the output
-               may be slightly different (but formally equivalent) 
+               may be slightly different (but formally equivalent)
 	       with Python 2.4 than with later versions.
 
 To install the program in your systems standard location, simply type:
-python setup.py install 
-To choose a different location, add 
---prefix=where/you/want/it 
+python setup.py install
+To choose a different location, add
+--prefix=where/you/want/it
 to the above line. For help and more options type
 python setup.py --help
 
@@ -73,8 +84,8 @@ that contains the manual and sample cif files.
 
 DOCUMENTATION
 
-The setup will install the manual, cif2cell.pdf, into the 
-$PREFIX/lib/cif2cell/docs directory. 
+The setup will install the manual, cif2cell.pdf, into the
+$PREFIX/lib/cif2cell/docs directory.
 
 
 RUNNING
@@ -105,8 +116,8 @@ along with cif2cell.  If not, see <http://www.gnu.org/licenses/>.
 Happy computing!
 
 Torbjorn Bjorkman
-COMP, Aaalto University School ofScience and Technology, 
-Department of Applied Physics, 
+COMP, Aaalto University School ofScience and Technology,
+Department of Applied Physics,
 Espoo, Finland
 torbjorn@cc.hut.fi
 
