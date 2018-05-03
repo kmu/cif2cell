@@ -2,10 +2,15 @@
 
 * Original version of cif2cell (https://sourceforge.net/projects/cif2cell/) is modified for compatibility with Python 3.
 
-## Dependency
+[![Build Status](https://travis-ci.com/kmu/cif2cell.svg?branch=master)](https://travis-ci.com/kmu/cif2cell)
+
+## INSTALLATION
 
 ```
-pip install PyCIFRW
+git clone git@github.com:kmu/cif2cell.git
+cd cif2cell
+pip install -r requirements.txt
+pip install .
 ```
 
 # CIF2CELL
