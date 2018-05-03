@@ -488,7 +488,7 @@ if options.randomdisp and not makesupercell:
 
 # Print cell
 if verbose or not options.program and not options.quiet:
-    print(string.upper(programname)+" "+version)
+    print(programname.upper()+" "+version)
     print(datestring)
     # Print compound
     compoundstring = "Output for "
@@ -576,11 +576,11 @@ if verbose or not options.program and not options.quiet:
                 tmpstring1 = ""
                 tmpstring2 = ""
                 tmpstring3 = ""
-                for k,v in b.species.iteritems():
+                for k,v in b.species.items():
                     tmpstring1 += k+"/"
                     tmpstring2 += str(v).rstrip("0.")+"/"
                     # charge output
-                    for k2,v2 in inputcell.chargedict.iteritems():
+                    for k2,v2 in inputcell.chargedict.items():
                         if k2.strip(string.punctuation+string.digits) == k:
                             tmpstring3 += str(v2)+"/"
                 tmpstring1 = tmpstring1.rstrip("/")
@@ -634,11 +634,11 @@ if verbose or not options.program and not options.quiet:
         tmpstring = ""
         occstring = ""
         chargestring = ""
-        for k,v in inputcell.occupations[i].iteritems():
+        for k,v in inputcell.occupations[i].items():
             tmpstring += k+"/"
             occstring += str(v)+"/"
             # charge output
-            for k2,v2 in inputcell.chargedict.iteritems():
+            for k2,v2 in inputcell.chargedict.items():
                 if k2.strip(string.punctuation+string.digits) == k:
                     chargestring += str(v2)+"/"
         tmpstring = tmpstring.rstrip("/")
@@ -684,7 +684,7 @@ if verbose or not options.program and not options.quiet:
         weight = 0.0
         for a in cd.atomdata:
             for b in a:
-                for k,v in b.species.iteritems():
+                for k,v in b.species.items():
                     weight += ed.elementweight[k]*v
         density = weight/volume
         print("Unit cell density : "+decform%density+" u/"+volstring+"^3 = "+decform%(density*uperautogpercm)+" g/cm^3")
@@ -930,7 +930,7 @@ if options.vca:
     groups = []
     for a in cd.atomdata:
         if len(a[0].species) > 1:
-            t = [ed.elementgroup[sp] for sp,conc in a[0].species.iteritems()]
+            t = [ed.elementgroup[sp] for sp,conc in a[0].species.items()]
             groups.append((min(t),max(t)))
             if len(a[0].species) > 2:
                 vcawarning1 = True

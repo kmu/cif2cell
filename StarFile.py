@@ -1006,7 +1006,7 @@ class StarLengthError(Exception):
 def ReadStar(filename,maxlength=2048,dest=StarFile(),scantype='standard',grammar='1.1'):
     import string
     if grammar=="1.1":
-        import YappsStarParser_1_1 as Y
+        from CifFile import YappsStarParser_1_1 as Y
     elif grammar=="1.0":
         import YappsStarParser_1_0 as Y
     elif grammar=="DDLm":

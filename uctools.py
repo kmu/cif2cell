@@ -42,6 +42,7 @@ from spacegroupdata import *
 from elementdata import *
 from random import random, gauss
 from fractions import gcd
+from functools import reduce
 
 ################################################################################################
 class CellData(GeometryObject):
@@ -281,7 +282,7 @@ class CellData(GeometryObject):
         for a in self.atomdata:
             # Check concentration
             t = 0.0
-            for sp,conc in a[0].species.iteritems():
+            for sp,conc in a[0].species.items():
                 t += conc
             # Add vacuum spheres if partially empty
             if abs(1.0-t) > a[0].compeps:
@@ -620,10 +621,10 @@ class CellData(GeometryObject):
             self.atomdata.append([])
             self.atomdata[i].append(AtomSite(position=self.ineqsites[i], label=self.sitelabels[i]))
             # Add species and occupations to atomdata
-            for k,v in self.occupations[i].iteritems():
+            for k,v in self.occupations[i].items():
                 self.atomdata[i][0].species[k] = v
                 # Add charge state
-                for k2,v2 in self.chargedict.iteritems():
+                for k2,v2 in self.chargedict.items():
                     if k2.strip(string.punctuation+string.digits) == k:
                         self.atomdata[i][0].charges[k] = v2
             ## self.atomdata[i][0].charge = self.charges[i]
@@ -723,7 +724,7 @@ class CellData(GeometryObject):
         # Chemical content dictionary
         for a in self.atomdata:
             for b in a:
-                for k,v in b.species.iteritems():
+                for k,v in b.species.items():
                     if k in self.ChemicalComposition:
                         n = self.ChemicalComposition[k]
                         self.ChemicalComposition[k] = v+n
@@ -732,7 +733,7 @@ class CellData(GeometryObject):
         if not self.alloy:
             L = self.ChemicalComposition.values()
             divisor = reduce(gcd,L)
-            for k,v in self.ChemicalComposition.iteritems():
+            for k,v in self.ChemicalComposition.items():
                 self.ChemicalComposition[k] = v/divisor
         # Number of atoms
         self.numberOfAtoms = self.natoms()
@@ -1017,10 +1018,10 @@ class CellData(GeometryObject):
                 # check if the string contains only '1', '2' or '3'
                 allbut123 = string.printable.replace("1","").replace("2","").replace("3","")
                 # dummy table to work in python < 2.6
-                table = string.maketrans("a","a")
+                table = str.maketrans("a","a")
                 if len(string.translate(sort,table,allbutxyz)) == 3:
                     # Sort atoms by cartesian coordinate
-                    sortnum = string.translate(sort,string.maketrans("xyz","012"))
+                    sortnum = string.translate(sort,str.maketrans("xyz","012"))
                     for i in sortnum:
                         self.atomdata.sort(key = lambda a: a[0].position.transform(self.latticevectors)[int(i)])
                 elif len(string.translate(sort,table,allbut123)) == 3:
@@ -1050,7 +1051,8 @@ class CellData(GeometryObject):
                 pass
         for HMid in ['_symmetry_space_group_name_H-M','_space_group_name_H-M_alt']:
             try:
-                self.HMSymbol=cifblock[HMid].translate(string.maketrans("", ""),string.whitespace)
+                # self.HMSymbol=cifblock[HMid].translate(str.maketrans("", ""),str.whitespace)
+                self.HMSymbol=cifblock[HMid]
             except:
                 pass
 
@@ -1087,7 +1089,7 @@ class CellData(GeometryObject):
                 try:
                     eqsitestrs = eqsitedata.get(symopid)
                     # This if fixes a funny exception that can occur for the P1 space group.
-                    if type(eqsitestrs) == StringType:
+                    if type(eqsitestrs) == str:
                         eqsitestrs = [eqsitestrs]
                     eqsites = []
                     for i in range(len(eqsitestrs)):
@@ -1238,7 +1240,7 @@ class CellData(GeometryObject):
                 sitexer = tmpdata.get('_atom_site_fract_x')
                 siteyer = tmpdata.get('_atom_site_fract_y')
                 sitezer = tmpdata.get('_atom_site_fract_z')
-            if (type(sitexer) == NoneType or type(siteyer) == NoneType or type(sitezer) == NoneType or \
+            if (type(sitexer) == None or type(siteyer) == None or type(sitezer) == None or \
                 '?' in sitexer or '?' in siteyer or '?' in sitezer or \
                 '.' in sitexer or '.' in siteyer or '.' in sitezer):
                 if self.force:
@@ -1255,16 +1257,16 @@ class CellData(GeometryObject):
 
         # Element names
         elementsymbs = tmpdata.get('_atom_site_type_symbol')
-        if type(elementsymbs) == NoneType or '?' in elementsymbs or '.' in elementsymbs:
+        if type(elementsymbs) == None or '?' in elementsymbs or '.' in elementsymbs:
             elementsymbs = tmpdata.get('_atom_site_label')
-            if type(elementsymbs) == NoneType:
+            if type(elementsymbs) == None:
                 # Fill up with question marks if not found
                 sys.stderr.write("***Warning: Could not find element names.\n")
                 elementsymbs = ["??" for site in sitexer]
 
         # Site labels from _atom_site_label
         self.sitelabels = tmpdata.get('_atom_site_label')
-        if type(self.sitelabels) == NoneType:
+        if type(self.sitelabels) == None:
             # Fill up with question marks if not found
             if not self.quiet:
                 sys.stderr.write("Could not find site labels.\n")
@@ -1397,11 +1399,11 @@ class CellData(GeometryObject):
                     tmpstring1 = ""
                     tmpstring2 = ""
                     tmpstring3 = ""
-                    for k,v in b.species.iteritems():
+                    for k,v in b.species.items():
                         tmpstring1 += k+"/"
                         tmpstring2 += str(v).rstrip("0.")+"/"
                         # charge output
-                        for k2,v2 in self.chargedict.iteritems():
+                        for k2,v2 in self.chargedict.items():
                             if k2.strip(string.punctuation+string.digits) == k:
                                 tmpstring3 += str(v2)+"/"
                     tmpstring1 = tmpstring1.rstrip("/")
@@ -1472,11 +1474,11 @@ class CellData(GeometryObject):
                 spcsstring = ""
                 occstring = ""
                 chargestring = ""
-                for k,v in b.species.iteritems():
+                for k,v in b.species.items():
                     spcsstring += k+"/"
                     occstring += str(v).rstrip("0.")+"/"
                     # charge output
-                    for k2,v2 in self.chargedict.iteritems():
+                    for k2,v2 in self.chargedict.items():
                         if k2.strip(string.punctuation+string.digits) == k:
                             chargestring += str(v2)+"/"
                 spcsstring = spcsstring.rstrip("/")
@@ -1629,9 +1631,9 @@ class ReferenceData:
     def getFromCIF(self, cifblock=None):
         # Get long compound name
         self.compound = cifblock.get('_chemical_name_systematic')
-        if type(self.compound) == NoneType:
+        if type(self.compound) == None:
             self.compound = cifblock.get('_chemical_name_mineral')
-            if type(self.compound) == NoneType:
+            if type(self.compound) == None:
                 self.compound = ""
         # Get short compound name
         try:
@@ -1641,9 +1643,9 @@ class ReferenceData:
                 self.cpd = cifblock.get('_chemical_formula_sum')
             except:
                 self.cpd = ""
-        if type(self.compound) != StringType:
+        if type(self.compound) != str:
             self.compound = ""
-        if type(self.cpd) != StringType:
+        if type(self.cpd) != str:
             self.cpd = ""
         # Ty to set up chemical content set
         try:
@@ -1668,7 +1670,7 @@ class ReferenceData:
             if not alloy:
                 L = self.ChemicalComposition.values()
                 divisor = reduce(gcd,L)
-                for k,v in self.ChemicalComposition.iteritems():
+                for k,v in self.ChemicalComposition.items():
                     self.ChemicalComposition[k] = v/divisor
         except:
             # If not found, then ignore, this is just to test internal consistency.
@@ -1678,11 +1680,11 @@ class ReferenceData:
             # First all the standard ones
             try:
                 tmp = cifblock.get('_database_code_'+db)
-                if type(tmp) != NoneType:
+                if type(tmp) != None:
                     self.databasecode = tmp
                     self.database = self.databasenames[db]
                     self.databasestring = "CIF file exported from "+self.database+\
-                                     ".\nDatabase reference code: "+self.databasecode+"."
+                                     ".\nDatabase reference code: {}.".format(self.databasecode)
                     break
                 else:
                     pass
@@ -1698,7 +1700,7 @@ class ReferenceData:
         if self.databasecode == "":
             try:
                 tmp = cifblock.get('_cod_database_code')
-                if type(tmp) != NoneType:
+                if type(tmp) != None:
                     self.databasecode = tmp
                     self.database = self.databasenames["COD"]
                     self.databasestring = "CIF file exported from "+self.database+\
@@ -1712,7 +1714,7 @@ class ReferenceData:
         # Authors
             authorsloop = cifblock.GetLoop('_publ_author_name')
             self.authors = authorsloop.get('_publ_author_name')
-            if type(self.authors) == StringType:
+            if type(self.authors) == str:
                 self.authors = deletenewline(self.authors)
                 self.authorstring = self.authors
                 self.authors = self.authors.split(";")
@@ -1749,43 +1751,43 @@ class ReferenceData:
                 # No primary reference found, using the first one.
                 i = 0
             # journal/book title
-            if type(references.get('_citation_journal_full')) != NoneType:
+            if type(references.get('_citation_journal_full')) != None:
                 self.journal = references.get('_citation_journal_full')[i]
             else:
-                if type(references.get('_citation_journal_abbrev')) != NoneType:
+                if type(references.get('_citation_journal_abbrev')) != None:
                     self.journal = references.get('_citation_journal_abbrev')[i]
                 else:
-                    if type(references.get('_citation_book_title')) != NoneType:
+                    if type(references.get('_citation_book_title')) != None:
                         self.journal = references.get('_citation_book_title')[i]
                     else:
                         self.journal = ""
             # volume
-            if type(references.get('_citation_journal_volume')) != NoneType:
+            if type(references.get('_citation_journal_volume')) != None:
                 self.volume = references.get('_citation_journal_volume')[i]
             else:
                 self.volume = ""
-            if type(self.volume) == NoneType:
+            if type(self.volume) == None:
                 self.volume = ""
             # first page
-            if type(references.get('_citation_page_first')) != NoneType:
+            if type(references.get('_citation_page_first')) != None:
                 self.firstpage = references.get('_citation_page_first')[i]
             else:
                 self.firstpage = ""
-            if type(self.firstpage) == NoneType:
+            if type(self.firstpage) == None:
                 self.firstpage = ""
             # last page
-            if type(references.get('_citation_page_last')) != NoneType:
+            if type(references.get('_citation_page_last')) != None:
                 self.lastpage = references.get('_citation_page_last')[i]
             else:
                 self.lastpage = ""
-            if type(self.lastpage) == NoneType:
+            if type(self.lastpage) == None:
                 self.lastpage = ""
             # year
-            if type(references.get('_citation_year')) != NoneType:
+            if type(references.get('_citation_year')) != None:
                 self.year = references.get('_citation_year')[i]
             else:
                 self.year = ""
-            if type(self.year) == NoneType:
+            if type(self.year) == None:
                 self.year = ""
         except KeyError:
             try:
