@@ -25,7 +25,8 @@ import tarfile
 # Check for PyCifRW and attempt to install bundled version if not available.
 pycifrwmodulelist = []
 try:
-    import CifFile
+    # import CifFile
+    pass
 except:
     try:
         print("PyCifRW not found. Installing relevant modules.")
@@ -57,6 +58,7 @@ setup(name='cif2cell',
       version='1.2.10',
       description='Construct a unit cell from CIF data',
       long_description='A command-line tool to generate the geometrical setup for various electronic structure codes from a CIF format file.',
+      setup_requires=['PyCifRW'],
       author='Torbjorn Bjorkman',
       author_email='torbjornb@gmail.com',
       url='http://cif2cell.sourceforge.net/',
