@@ -1,6 +1,7 @@
 import unittest
 import subprocess
 import glob
+import os
 
 
 class TestCif2Cell(unittest.TestCase):
@@ -23,3 +24,4 @@ class TestCif2Cell(unittest.TestCase):
 
         assert not "***Warning: Space group operation check failed" in stdout_data.decode()
         assert not "Error" in stdout_data.decode()
+        assert os.path.exists("POSCAR")
