@@ -7,10 +7,7 @@
 ## INSTALLATION
 
 ```
-git clone git@github.com:kmu/cif2cell.git
-cd cif2cell
-pip install -r requirements.txt
-pip install .
+pip install git+ssh://git@github.com/kmu/zeopy.git
 ```
 
 # CIF2CELL
