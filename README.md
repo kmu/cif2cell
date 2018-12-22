@@ -3,7 +3,7 @@
 # Python 3 Support
 
 * [Original version of cif2cell](https://sourceforge.net/projects/cif2cell/) is modified for compatibility with Python 3 by @kmu. 
-* Keep in your mind that the original version now supports Python 3.
+* Keep in your mind that the original version began to support Python 3.
 * Let's cite [Computer Physics Communications, Volume 182, Issue 5, p. 1183-1186.](http://adsabs.harvard.edu/abs/2011CoPhC.182.1183B)
 
 ## INSTALLATION
