@@ -9,7 +9,7 @@
 ## INSTALLATION
 
 ```
-pip install git+ssh://git@github.com/kmu/zeopy.git
+pip install https://github.com/kmu/cif2cell.git
 ```
 
 # CIF2CELL
