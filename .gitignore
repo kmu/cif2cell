@@ -2,3 +2,4 @@
 .python-version
 cif2cell.egg-info
 POSCAR
+*.cell
