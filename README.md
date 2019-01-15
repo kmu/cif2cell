@@ -9,6 +9,7 @@
 ## INSTALLATION
 
 ```
+pip install PyCifRw
 pip install git+ssh://git@github.com/kmu/cif2cell.git
 ```
 
