@@ -2,9 +2,10 @@
 
 # Python 3 Support
 
-* [Original version of cif2cell](https://sourceforge.net/projects/cif2cell/) is modified for compatibility with Python 3 by @kmu. 
+* [Original version of cif2cell](https://sourceforge.net/projects/cif2cell/) is modified for compatibility with Python 3 by. 
+* Also tested for Python 2.7.
 * Keep in your mind that the original version began to support Python 3.
-* Let's cite [Computer Physics Communications, Volume 182, Issue 5, p. 1183-1186.](https://www.sciencedirect.com/science/article/pii/S0010465511000336)
+* Let's cite [Computer Physics Communications, Volume 182, Issue 5, p. 1183-1186.](https://www.sciencedirect.com/science/article/pii/S0010465511000336).
 
 ## INSTALLATION
 
@@ -12,7 +13,7 @@
 pip install git+ssh://git@github.com/kmu/cif2cell.git
 ```
 
-# CIF2CELL
+# Original README
 
 Copyright 2010, Torbjorn Bjorkman
 
