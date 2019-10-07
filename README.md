@@ -1,5 +1,9 @@
 [![Build Status](https://travis-ci.com/kmu/cif2cell.svg?branch=master)](https://travis-ci.com/kmu/cif2cell)
 
+# Latest version of cif2cell
+
+is developed on [another repo](https://github.com/torbjornbjorkman/cif2cell).
+
 # Python 3 Support
 
 * [Original version of cif2cell](https://sourceforge.net/projects/cif2cell/) is modified for compatibility with Python 3 by @kmu. 
