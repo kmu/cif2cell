@@ -41,7 +41,7 @@ from utils import *
 from spacegroupdata import *
 from elementdata import *
 from random import random, gauss
-from fractions import gcd
+from math import gcd
 from functools import reduce
 
 ################################################################################################
